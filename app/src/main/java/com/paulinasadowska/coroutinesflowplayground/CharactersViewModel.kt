@@ -12,7 +12,9 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
 
     val characters: LiveData<List<CharacterToDisplay>> = repository.fetchCharactersList()
             .map { characters ->
-                characters.map { CharacterToDisplay(it.name, it.imageUrl ?: "") }
+                characters.map {
+                    CharacterToDisplay(it.name, it.imageUrl ?: "")
+                }
             }
             .asLiveData()
 }

@@ -20,6 +20,10 @@ class CharactersAdapter : ListAdapter<CharacterToDisplay, CharactersAdapter.Char
         holder.bind(character)
     }
 
+    override fun onViewRecycled(holder: CharacterViewHolder) {
+        holder.unbind()
+    }
+
     class CharacterViewHolder(
             private val binding: CharacterItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -27,6 +31,13 @@ class CharactersAdapter : ListAdapter<CharacterToDisplay, CharactersAdapter.Char
         fun bind(characterToBind: CharacterToDisplay) {
             binding.apply {
                 character = characterToBind
+                executePendingBindings()
+            }
+        }
+
+        fun unbind() {
+            binding.apply {
+                character = CharacterToDisplay.EMPTY
                 executePendingBindings()
             }
         }
@@ -45,4 +56,8 @@ class CharactersDiffCallback : DiffUtil.ItemCallback<CharacterToDisplay>() {
 
 }
 
-data class CharacterToDisplay(val name: String, val imageUrl: String = "")
+data class CharacterToDisplay(val name: String, val imageUrl: String) {
+    companion object {
+        val EMPTY = CharacterToDisplay(name = "", imageUrl = "")
+    }
+}

@@ -2,6 +2,7 @@ package com.paulinasadowska.coroutinesflowplayground.dao
 
 import android.content.Context
 import androidx.room.*
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.Flow
 
 fun createDatabase(applicationContext: Context) = Room.databaseBuilder(
@@ -27,6 +28,5 @@ data class BookCharacter(
         val wizard: Boolean? = null,
         val hogwartsStudent: Boolean = false,
         val hogwartsStaff: Boolean = false,
-        @ColumnInfo(name = "image") val imageUrl: String?
-
+        @SerializedName("image") val imageUrl: String?
 )

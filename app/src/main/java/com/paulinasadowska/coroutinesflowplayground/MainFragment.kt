@@ -14,7 +14,7 @@ class CharactersFragment : Fragment() {
 
     private val viewModel by viewModels<CharactersViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = CharactersFragmentBinding.inflate(inflater, container, false)
         val charactersAdapter = CharactersAdapter()
 
@@ -24,7 +24,7 @@ class CharactersFragment : Fragment() {
         viewModel.characters.observe(this) { characters ->
             charactersAdapter.submitList(characters)
         }
-        
+
         return binding.root
     }
 }
