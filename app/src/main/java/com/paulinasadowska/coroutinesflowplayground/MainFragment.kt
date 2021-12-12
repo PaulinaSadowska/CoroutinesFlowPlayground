@@ -25,6 +25,16 @@ class CharactersFragment : Fragment() {
             charactersAdapter.submitList(characters)
         }
 
+        //todo - zmien na radiogroup a filters na enum
+        binding.apply {
+            staffCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setStaffChecked(isChecked)
+            }
+            studentsCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setStudentsChecked(isChecked)
+            }
+        }
+
         return binding.root
     }
 }
