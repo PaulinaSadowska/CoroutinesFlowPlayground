@@ -23,15 +23,24 @@ class CharactersFragment : Fragment() {
         }
         viewModel.characters.observe(this) { characters ->
             charactersAdapter.submitList(characters)
+            binding.charactersRecyclerView.smoothScrollToPosition(0)
         }
 
-        //todo - zmien na radiogroup a filters na enum
         binding.apply {
-            staffCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.setStaffChecked(isChecked)
+            staffRadioButton.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    viewModel.setStaffChecked()
+                }
             }
-            studentsCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.setStudentsChecked(isChecked)
+            studentsRadioButton.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    viewModel.setStudentsChecked()
+                }
+            }
+            allRadioButton.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    viewModel.setAllChecked()
+                }
             }
         }
 

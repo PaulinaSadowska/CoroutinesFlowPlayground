@@ -13,18 +13,16 @@ import javax.inject.Inject
 @HiltViewModel
 class CharactersViewModel @Inject constructor(repository: BookCharactersRepository) : ViewModel() {
 
-    private val selectionFilters = MutableStateFlow(SelectionFilters())
+    private val selectionFilters = MutableStateFlow(CharactersFilter.ALL)
 
     val characters: LiveData<List<CharacterToDisplay>> = repository.fetchCharactersList()
             .combine(selectionFilters) { characters, filters ->
                 characters.filter {
-                    if (filters.staff) {
-                        it.hogwartsStaff
-                    } else true
-                }.filter {
-                    if (filters.student) {
-                        it.hogwartsStudent
-                    } else true
+                    when (filters) {
+                        CharactersFilter.STAFF -> it.hogwartsStaff
+                        CharactersFilter.STUDENT -> it.hogwartsStudent
+                        else -> true
+                    }
                 }
             }.map { characters: List<BookCharacter> ->
                 characters.map {
@@ -33,16 +31,19 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
             }
             .asLiveData()
 
-    fun setStaffChecked(checked: Boolean) {
-        selectionFilters.value = selectionFilters.value.copy(staff = checked)
+    fun setStaffChecked() {
+        selectionFilters.value = CharactersFilter.STAFF
     }
 
-    fun setStudentsChecked(checked: Boolean) {
-        selectionFilters.value = selectionFilters.value.copy(student = checked)
+    fun setStudentsChecked() {
+        selectionFilters.value = CharactersFilter.STUDENT
+    }
+
+    fun setAllChecked() {
+        selectionFilters.value = CharactersFilter.ALL
     }
 }
 
-data class SelectionFilters(
-        val staff: Boolean = false,
-        val student: Boolean = false,
-)
+enum class CharactersFilter {
+    STUDENT, STAFF, ALL
+}

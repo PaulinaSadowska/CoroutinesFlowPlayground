@@ -3,4 +3,5 @@
     <string name="a11y_character_list_image">photo</string>
     <string name="students">Students</string>
     <string name="staff">Staff</string>
+    <string name="all">All</string>
 </resources>
