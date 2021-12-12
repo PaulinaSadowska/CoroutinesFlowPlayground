@@ -15,7 +15,8 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
 
     private val selectionFilters = MutableStateFlow(CharactersFilter.ALL)
 
-    val characters: LiveData<List<CharacterToDisplay>> = repository.fetchCharactersList()
+    val characters: LiveData<List<CharacterToDisplay>> = repository
+            .fetchCharactersList()
             .combine(selectionFilters) { characters, filters ->
                 characters.filter {
                     when (filters) {

@@ -7,18 +7,24 @@ import kotlinx.coroutines.flow.Flow
 
 fun createDatabase(applicationContext: Context) = Room.databaseBuilder(
         applicationContext,
-        AppDatabase::class.java, "hp-characters"
+        CharactersDatabase::class.java, "bookCharacters"
 ).build()
 
 @Database(entities = [BookCharacter::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
+abstract class CharactersDatabase : RoomDatabase() {
     abstract fun bookCharactersDao(): BookCharactersDao
 }
 
 @Dao
 interface BookCharactersDao {
-    @Query("SELECT * FROM bookcharacter")
+    @Query("SELECT * FROM bookCharacter")
     fun getAllCharacters(): Flow<List<BookCharacter>>
+
+    @Query("DELETE FROM bookCharacter")
+    fun deleteAll()
+
+    @Insert
+    fun saveCharacters(characters: List<BookCharacter>)
 }
 
 @Entity

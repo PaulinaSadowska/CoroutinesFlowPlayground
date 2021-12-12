@@ -1,31 +1,29 @@
 package com.paulinasadowska.coroutinesflowplayground
 
 import com.paulinasadowska.coroutinesflowplayground.dao.BookCharacter
+import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersDao
 import com.paulinasadowska.coroutinesflowplayground.network.BookCharactersService
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class BookCharactersRepository @Inject constructor(
-        private val charactersService: BookCharactersService
+        private val charactersService: BookCharactersService,
+        private val charactersDao: BookCharactersDao
 ) {
 
-    fun fetchCharactersList(): Flow<List<BookCharacter>> = flow {
-        emit(charactersService.fetchAllCharacters())
-    }
+    fun fetchCharactersList(): Flow<List<BookCharacter>> = charactersDao
+            .getAllCharacters()
+            .flatMapLatest {
+                flow {
+                    val characters = charactersService.fetchAllCharacters()
+                    emit(characters)
+                }
+            }
 
-    private val mockData = listOf(
-            BookCharacter("Purus", imageUrl = "http://hp-api.herokuapp.com/images/harry.jpg"),
-            BookCharacter("Neko", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 2", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 3", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 4", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 5", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 6", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 7", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Test 9", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Amazing cat", imageUrl = "https://picsum.photos/400/400"),
-            BookCharacter("Amazing cat ", imageUrl = "https://picsum.photos/400/400")
-    )
+    private fun saveCharacters(bookCharacter: List<BookCharacter>){
+        charactersDao.deleteAll()
+        charactersDao.saveCharacters(bookCharacter)
+    }
 }

@@ -1,10 +1,14 @@
 package com.paulinasadowska.coroutinesflowplayground.di
 
+import android.content.Context
+import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersDao
+import com.paulinasadowska.coroutinesflowplayground.dao.createDatabase
 import com.paulinasadowska.coroutinesflowplayground.network.BookCharactersService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object BookCharactersModule {
 
     @Provides
-    fun provideBookCharacters(): BookCharactersService {
+    fun provideBookCharactersService(): BookCharactersService {
         val retrofit = Retrofit.Builder()
                 .baseUrl("http://hp-api.herokuapp.com/api/")
                 .client(OkHttpClient())
@@ -22,5 +26,12 @@ object BookCharactersModule {
                 .build()
 
         return retrofit.create(BookCharactersService::class.java)
+    }
+
+    @Provides
+    fun provideBookCharactersDatabase(
+            @ApplicationContext context: Context
+    ): BookCharactersDao {
+        return createDatabase(applicationContext = context).bookCharactersDao()
     }
 }
