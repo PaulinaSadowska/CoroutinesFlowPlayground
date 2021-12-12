@@ -5,7 +5,6 @@ import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersDao
 import com.paulinasadowska.coroutinesflowplayground.network.BookCharactersService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -18,17 +17,11 @@ class BookCharactersRepository @Inject constructor(
 ) {
 
     fun fetchCharactersList(): Flow<List<BookCharacter>> = flow {
-        val charactersFromDao = charactersDao.getAllCharacters()
-        emit(charactersFromDao)
-        delay(5000)
+        emit(charactersDao.getAllCharacters())
         val characters = charactersService.fetchAllCharacters()
         withContext(defaultDispatcher) {
-            saveCharacters(characters)
+            charactersDao.saveCharacters(characters)
         }
         emit(characters)
-    }
-
-    private suspend fun saveCharacters(bookCharacter: List<BookCharacter>) {
-        charactersDao.saveCharacters(bookCharacter)
     }
 }
