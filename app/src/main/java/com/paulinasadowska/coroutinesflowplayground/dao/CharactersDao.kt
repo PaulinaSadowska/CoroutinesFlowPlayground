@@ -17,14 +17,11 @@ abstract class CharactersDatabase : RoomDatabase() {
 
 @Dao
 interface BookCharactersDao {
-    @Query("SELECT * FROM bookCharacter")
-    fun getAllCharacters(): Flow<List<BookCharacter>>
+    @Query("SELECT * FROM bookcharacter")
+    suspend fun getAllCharacters(): List<BookCharacter>
 
-    @Query("DELETE FROM bookCharacter")
-    fun deleteAll()
-
-    @Insert
-    fun saveCharacters(characters: List<BookCharacter>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveCharacters(characters: List<BookCharacter>)
 }
 
 @Entity

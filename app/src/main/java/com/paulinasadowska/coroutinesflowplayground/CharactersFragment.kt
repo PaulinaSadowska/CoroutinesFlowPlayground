@@ -1,6 +1,7 @@
 package com.paulinasadowska.coroutinesflowplayground
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,6 @@ class CharactersFragment : Fragment() {
         }
         viewModel.characters.observe(this) { characters ->
             charactersAdapter.submitList(characters)
-            binding.charactersRecyclerView.smoothScrollToPosition(0)
         }
 
         binding.apply {

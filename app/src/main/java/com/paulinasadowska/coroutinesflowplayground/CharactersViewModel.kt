@@ -19,16 +19,19 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
             .fetchCharactersList()
             .combine(selectionFilters) { characters, filters ->
                 characters.filter {
-                    when (filters) {
-                        CharactersFilter.STAFF -> it.hogwartsStaff
-                        CharactersFilter.STUDENT -> it.hogwartsStudent
-                        else -> true
+                    if (it.imageUrl.isNullOrBlank()) {
+                        false
+                    } else {
+                        when (filters) {
+                            CharactersFilter.STAFF -> it.hogwartsStaff
+                            CharactersFilter.STUDENT -> it.hogwartsStudent
+                            else -> true
+                        }
                     }
                 }
             }.map { characters: List<BookCharacter> ->
-                characters.map {
-                    CharacterToDisplay(it.name, it.imageUrl ?: "")
-                }
+                characters
+                        .map { CharacterToDisplay(it.name, it.imageUrl ?: "") }
             }
             .asLiveData()
 
