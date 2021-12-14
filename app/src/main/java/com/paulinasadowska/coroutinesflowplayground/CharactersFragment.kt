@@ -26,6 +26,14 @@ class CharactersFragment : Fragment() {
             charactersAdapter.submitList(characters)
         }
 
+        viewModel.filters.observe(this) { filters ->
+            when (filters) {
+                CharactersFilter.ALL -> binding.allRadioButton.isChecked = true
+                CharactersFilter.STAFF -> binding.staffRadioButton.isChecked = true
+                CharactersFilter.STUDENT -> binding.studentsRadioButton.isChecked = true
+            }
+        }
+
         binding.apply {
             staffRadioButton.setOnSelectedListener {
                 viewModel.setStaffChecked()
