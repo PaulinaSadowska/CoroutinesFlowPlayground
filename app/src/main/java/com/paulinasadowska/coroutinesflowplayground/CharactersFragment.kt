@@ -1,10 +1,10 @@
 package com.paulinasadowska.coroutinesflowplayground
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.paulinasadowska.coroutinesflowplayground.databinding.CharactersFragmentBinding
@@ -27,23 +27,25 @@ class CharactersFragment : Fragment() {
         }
 
         binding.apply {
-            staffRadioButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    viewModel.setStaffChecked()
-                }
+            staffRadioButton.setOnSelectedListener {
+                viewModel.setStaffChecked()
             }
-            studentsRadioButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    viewModel.setStudentsChecked()
-                }
+            studentsRadioButton.setOnSelectedListener {
+                viewModel.setStudentsChecked()
             }
-            allRadioButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    viewModel.setAllChecked()
-                }
+            allRadioButton.setOnSelectedListener {
+                viewModel.setAllChecked()
             }
         }
 
         return binding.root
+    }
+
+    private fun RadioButton.setOnSelectedListener(action: () -> Unit) {
+        setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                action()
+            }
+        }
     }
 }
