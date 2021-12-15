@@ -35,16 +35,6 @@
 
         </RadioGroup>
 
-        <Button
-            android:id="@+id/nextFragmentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NEXT!"
-            app:layout_constraintBottom_toBottomOf="@+id/filters"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filters" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/charactersRecyclerView"
             android:layout_width="match_parent"
@@ -54,7 +44,7 @@
             android:paddingTop="@dimen/header_margin"
             android:paddingEnd="@dimen/card_side_margin"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/nextFragmentButton"
+            app:layout_constraintTop_toBottomOf="@+id/filters"
             app:spanCount="@integer/grid_columns"
             tools:context=".MainActivity"
             tools:listitem="@layout/character_item" />

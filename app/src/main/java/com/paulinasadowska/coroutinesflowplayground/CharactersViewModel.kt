@@ -28,7 +28,6 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
 
     init {
         viewModelScope.launch {
-            delay(3000)
             repository.fetchRecentCharacters()
         }
     }

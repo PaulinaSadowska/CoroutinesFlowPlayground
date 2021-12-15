@@ -36,11 +36,6 @@ class CharactersFragment : Fragment() {
         }
 
         binding.apply {
-            binding.nextFragmentButton.setOnClickListener {
-                val action = CharactersFragmentDirections
-                        .actionCharactersFragmentToCharacterDetailsFragment("CHARACTER NAME")
-                findNavController().navigate(action)
-            }
             staffRadioButton.setOnSelectedListener {
                 viewModel.setStaffChecked()
             }

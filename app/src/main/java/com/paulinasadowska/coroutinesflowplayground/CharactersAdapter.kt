@@ -2,6 +2,7 @@ package com.paulinasadowska.coroutinesflowplayground
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,11 @@ class CharactersAdapter : ListAdapter<CharacterToDisplay, CharactersAdapter.Char
         fun bind(characterToBind: CharacterToDisplay) {
             binding.apply {
                 character = characterToBind
+                itemView.setOnClickListener {
+                    val action = CharactersFragmentDirections
+                            .actionCharactersFragmentToCharacterDetailsFragment(characterToBind.name)
+                    itemView.findNavController().navigate(action)
+                }
                 executePendingBindings()
             }
         }
