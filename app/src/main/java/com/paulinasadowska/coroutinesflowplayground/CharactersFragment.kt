@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.paulinasadowska.coroutinesflowplayground.databinding.CharactersFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +36,11 @@ class CharactersFragment : Fragment() {
         }
 
         binding.apply {
+            binding.nextFragmentButton.setOnClickListener {
+                val action = CharactersFragmentDirections
+                        .actionCharactersFragmentToCharacterDetailsFragment("CHARACTER NAME")
+                findNavController().navigate(action)
+            }
             staffRadioButton.setOnSelectedListener {
                 viewModel.setStaffChecked()
             }
