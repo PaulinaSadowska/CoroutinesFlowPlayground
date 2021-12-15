@@ -5,7 +5,8 @@ import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersDao
 import com.paulinasadowska.coroutinesflowplayground.network.BookCharactersService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -16,16 +17,15 @@ class BookCharactersRepository @Inject constructor(
 ) {
 
     suspend fun fetchRecentCharacters() {
-        val characters = charactersService.fetchAllCharacters()
-        charactersDao.saveCharacters(characters)
+        return withContext(defaultDispatcher) {
+            val characters = charactersService.fetchAllCharacters()
+            charactersDao.saveCharacters(characters)
+        }
     }
 
-    fun fetchCharactersList(filters: CharactersFilter): Flow<List<BookCharacter>> =
-            flow {
-                val characters = charactersDao
-                        .getAllCharacters()
-                        .applyMainSafeFilterAndSort(filters)
-                emit(characters)
+    suspend fun fetchCharactersList(filters: CharactersFilter): Flow<List<BookCharacter>> =
+            charactersDao.getAllCharacters().map {
+                it.applyMainSafeFilterAndSort(filters)
             }
 
     private suspend fun List<BookCharacter>.applyMainSafeFilterAndSort(filters: CharactersFilter): List<BookCharacter> {

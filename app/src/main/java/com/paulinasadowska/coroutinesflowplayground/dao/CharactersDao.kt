@@ -18,7 +18,7 @@ abstract class CharactersDatabase : RoomDatabase() {
 @Dao
 interface BookCharactersDao {
     @Query("SELECT * FROM bookcharacter")
-    suspend fun getAllCharacters(): List<BookCharacter>
+    fun getAllCharacters(): Flow<List<BookCharacter>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveCharacters(characters: List<BookCharacter>)

@@ -4,22 +4,14 @@ import androidx.lifecycle.*
 import com.paulinasadowska.coroutinesflowplayground.dao.BookCharacter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class CharactersViewModel @Inject constructor(repository: BookCharactersRepository) : ViewModel() {
-
-    private val _snackbar = MutableLiveData<String?>()
-
-    val snackbar: LiveData<String?>
-        get() = _snackbar
-
-    private val _spinner = MutableLiveData(false)
-
-    val spinner: LiveData<Boolean>
-        get() = _spinner
 
     private val selectionFilters = MutableStateFlow(CharactersFilter.ALL)
 
@@ -35,20 +27,10 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
             .asLiveData()
 
     init {
-        selectionFilters.value = CharactersFilter.ALL
-        loadDataFor(selectionFilters) { // todo -  to many requests! and data not displayed initially
-            _spinner.value = true
+        viewModelScope.launch {
+            delay(3000)
             repository.fetchRecentCharacters()
         }
-    }
-
-    private fun <T> loadDataFor(source: StateFlow<T>, block: suspend (T) -> Unit) {
-        source
-                .mapLatest(block)
-                .onEach { _spinner.value = false }
-                .catch { t -> _snackbar.value = t.message }
-                .launchIn(viewModelScope)
-
     }
 
     fun setStaffChecked() {
