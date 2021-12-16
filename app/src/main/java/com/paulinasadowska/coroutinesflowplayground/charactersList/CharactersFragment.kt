@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.paulinasadowska.coroutinesflowplayground.databinding.CharactersFragmentBinding
@@ -14,9 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class CharactersFragment : Fragment() {
 
     private val viewModel by viewModels<CharactersViewModel>()
+    private lateinit var binding: CharactersFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = CharactersFragmentBinding.inflate(inflater, container, false)
+        binding = CharactersFragmentBinding.inflate(inflater, container, false)
         val charactersAdapter = CharactersAdapter()
 
         binding.charactersRecyclerView.apply {
@@ -34,7 +36,14 @@ class CharactersFragment : Fragment() {
             }
         }
 
+  /*   TODO    viewModel.searchedName.observe(this) {
+            binding.searchByName.setText(it)
+        }*/
+
         binding.apply {
+            searchByName.addTextChangedListener { editable ->
+                viewModel.setSearchedName(editable.toString())
+            }
             staffRadioButton.setOnSelectedListener {
                 viewModel.setStaffChecked()
             }
@@ -55,5 +64,10 @@ class CharactersFragment : Fragment() {
                 action()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //TODO - binding.searchByName.removeTextChangedListener()
     }
 }

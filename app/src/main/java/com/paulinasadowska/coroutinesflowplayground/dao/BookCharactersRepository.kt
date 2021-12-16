@@ -22,18 +22,18 @@ class BookCharactersRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchCharactersList(filters: CharactersFilter): Flow<List<BookCharacter>> =
+    suspend fun fetchCharactersList(filters: CharactersFilter, searchedName: String): Flow<List<BookCharacter>> =
             charactersDao.getAllCharacters().map {
-                it.applyMainSafeFilterAndSort(filters)
+                it.applyMainSafeFilterAndSort(filters, searchedName)
             }
 
 
     suspend fun fetchCharacter(characterName: String): BookCharacter =
             charactersDao.getCharacter(characterName)
 
-    private suspend fun List<BookCharacter>.applyMainSafeFilterAndSort(filters: CharactersFilter): List<BookCharacter> {
+    private suspend fun List<BookCharacter>.applyMainSafeFilterAndSort(filters: CharactersFilter, searchedName: String): List<BookCharacter> {
         return withContext(defaultDispatcher) {
-            applyFilter(filters).applySort()
+            applyFilter(filters, searchedName).applySort()
         }
     }
 
@@ -41,15 +41,17 @@ class BookCharactersRepository @Inject constructor(
         return this.sortedBy { it.name }
     }
 
-    private fun List<BookCharacter>.applyFilter(filters: CharactersFilter): List<BookCharacter> {
+    private fun List<BookCharacter>.applyFilter(filters: CharactersFilter, searchedName: String): List<BookCharacter> {
         return filter {
-            if (it.imageUrl.isNullOrBlank()) {
-                false
-            } else {
-                when (filters) {
-                    CharactersFilter.STAFF -> it.hogwartsStaff
-                    CharactersFilter.STUDENT -> it.hogwartsStudent
-                    else -> true
+            when {
+                it.imageUrl.isNullOrBlank() -> false
+                !it.name.contains(searchedName) -> false
+                else -> {
+                    when (filters) {
+                        CharactersFilter.STAFF -> it.hogwartsStaff
+                        CharactersFilter.STUDENT -> it.hogwartsStudent
+                        else -> true
+                    }
                 }
             }
         }
