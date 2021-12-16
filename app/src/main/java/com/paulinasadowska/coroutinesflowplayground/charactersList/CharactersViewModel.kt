@@ -1,10 +1,10 @@
-package com.paulinasadowska.coroutinesflowplayground
+package com.paulinasadowska.coroutinesflowplayground.charactersList
 
 import androidx.lifecycle.*
+import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersRepository
 import com.paulinasadowska.coroutinesflowplayground.dao.BookCharacter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +14,6 @@ import javax.inject.Inject
 class CharactersViewModel @Inject constructor(repository: BookCharactersRepository) : ViewModel() {
 
     private val selectionFilters = MutableStateFlow(CharactersFilter.ALL)
-
     val filters = selectionFilters.asLiveData()
 
     val characters: LiveData<List<CharacterToDisplay>> = selectionFilters

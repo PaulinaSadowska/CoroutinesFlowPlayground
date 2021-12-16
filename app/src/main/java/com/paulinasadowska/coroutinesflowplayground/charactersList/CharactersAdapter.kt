@@ -1,4 +1,4 @@
-package com.paulinasadowska.coroutinesflowplayground
+package com.paulinasadowska.coroutinesflowplayground.charactersList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -33,8 +33,7 @@ class CharactersAdapter : ListAdapter<CharacterToDisplay, CharactersAdapter.Char
             binding.apply {
                 character = characterToBind
                 itemView.setOnClickListener {
-                    val action = CharactersFragmentDirections
-                            .actionCharactersFragmentToCharacterDetailsFragment(characterToBind.name)
+                    val action = CharactersFragmentDirections.actionCharactersFragmentToCharacterDetailsFragment(characterToBind.name)
                     itemView.findNavController().navigate(action)
                 }
                 executePendingBindings()

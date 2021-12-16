@@ -1,4 +1,4 @@
-package com.paulinasadowska.coroutinesflowplayground
+package com.paulinasadowska.coroutinesflowplayground.charactersList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.paulinasadowska.coroutinesflowplayground.databinding.CharactersFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 

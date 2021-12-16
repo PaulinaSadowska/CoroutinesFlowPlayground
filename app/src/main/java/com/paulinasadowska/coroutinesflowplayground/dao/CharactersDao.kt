@@ -20,6 +20,9 @@ interface BookCharactersDao {
     @Query("SELECT * FROM bookcharacter")
     fun getAllCharacters(): Flow<List<BookCharacter>>
 
+    @Query("SELECT * FROM bookcharacter WHERE name IS :name")
+    suspend fun getCharacter(name: String): BookCharacter
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveCharacters(characters: List<BookCharacter>)
 }

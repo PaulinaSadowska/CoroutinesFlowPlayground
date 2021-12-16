@@ -6,7 +6,7 @@
     <data>
         <variable
             name="character"
-            type="com.paulinasadowska.coroutinesflowplayground.CharacterToDisplay" />
+            type="com.paulinasadowska.coroutinesflowplayground.charactersList.CharacterToDisplay" />
     </data>
 
 
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/plant_item_image"
+                android:id="@+id/character_item_image"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/characters_list_image_height"
                 android:contentDescription="@string/a11y_character_list_image"
@@ -37,7 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/plant_item_title"
+                android:id="@+id/character_item_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_normal"
@@ -47,7 +47,7 @@
                 android:gravity="center_horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/plant_item_image"
+                app:layout_constraintTop_toBottomOf="@id/character_item_image"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="Tomato"/>
 

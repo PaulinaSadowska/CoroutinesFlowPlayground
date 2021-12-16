@@ -1,7 +1,6 @@
-package com.paulinasadowska.coroutinesflowplayground
+package com.paulinasadowska.coroutinesflowplayground.dao
 
-import com.paulinasadowska.coroutinesflowplayground.dao.BookCharacter
-import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersDao
+import com.paulinasadowska.coroutinesflowplayground.charactersList.CharactersFilter
 import com.paulinasadowska.coroutinesflowplayground.network.BookCharactersService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +26,10 @@ class BookCharactersRepository @Inject constructor(
             charactersDao.getAllCharacters().map {
                 it.applyMainSafeFilterAndSort(filters)
             }
+
+
+    suspend fun fetchCharacter(characterName: String): BookCharacter =
+            charactersDao.getCharacter(characterName)
 
     private suspend fun List<BookCharacter>.applyMainSafeFilterAndSort(filters: CharactersFilter): List<BookCharacter> {
         return withContext(defaultDispatcher) {
