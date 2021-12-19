@@ -41,7 +41,7 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
         _spinner.value = true
         viewModelScope.launch {
             try {
-                repository.fetchRecentCharacters()
+                repository.updateRecentCharacters()
             } catch (e: Throwable) {
                 _snackbar.value = e.message
             }

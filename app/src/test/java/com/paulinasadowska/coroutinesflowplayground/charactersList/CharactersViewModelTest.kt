@@ -78,7 +78,7 @@ class CharactersViewModelTest {
 
         // then
         coVerify {
-            repository.fetchRecentCharacters()
+            repository.updateRecentCharacters()
         }
     }
 
@@ -88,13 +88,13 @@ class CharactersViewModelTest {
         val exception = mockk<Throwable> {
             every { message } returns "test error"
         }
-        coEvery { repository.fetchRecentCharacters() } throws exception
+        coEvery { repository.updateRecentCharacters() } throws exception
         val subject = CharactersViewModel(repository)
         subject.snackbar.observeForever {}
 
         // then
         coVerify {
-            repository.fetchRecentCharacters()
+            repository.updateRecentCharacters()
         }
         assertThat(subject.snackbar.value).isEqualTo("test error")
     }

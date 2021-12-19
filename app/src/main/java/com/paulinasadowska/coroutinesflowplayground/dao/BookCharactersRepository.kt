@@ -16,7 +16,7 @@ class BookCharactersRepository @Inject constructor(
         private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    suspend fun fetchRecentCharacters() {
+    suspend fun updateRecentCharacters() {
         return withContext(defaultDispatcher) {
             val characters = charactersService.fetchAllCharacters()
             charactersDao.saveCharacters(characters)
