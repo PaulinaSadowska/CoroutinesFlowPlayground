@@ -1,17 +1,11 @@
 package com.paulinasadowska.coroutinesflowplayground.charactersList
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.paulinasadowska.coroutinesflowplayground.dao.BookCharacter
 import com.paulinasadowska.coroutinesflowplayground.dao.BookCharactersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,20 +16,35 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
     private val selectionFilters = MutableStateFlow(CharactersFilter.ALL)
     val filters = selectionFilters.asLiveData()
 
+    private val _snackbar = MutableLiveData<String>()
+    val snackbar: LiveData<String> = _snackbar
+
+    private val _spinner = MutableLiveData<Boolean>()
+    val spinner: LiveData<Boolean> = _spinner
+
     private val _searchedName = MutableStateFlow("")
 
     val characters: LiveData<List<CharacterToDisplay>> = selectionFilters
             .combine(_searchedName) { filters, searchedName -> filters to searchedName }
             .flatMapLatest { (filters, searchedName) -> repository.fetchCharactersList(filters, searchedName) }
+            .filterNot { it.isEmpty() }
             .map { characters: List<BookCharacter> ->
-                characters
-                        .map { CharacterToDisplay(it.name, it.imageUrl ?: "") }
+                val charactersToDisplay = characters.map {
+                    CharacterToDisplay(it.name, it.imageUrl ?: "")
+                }
+                _spinner.value = false
+                charactersToDisplay
             }
             .asLiveData()
 
     init {
+        _spinner.value = true
         viewModelScope.launch {
-            repository.fetchRecentCharacters()
+            try {
+                repository.fetchRecentCharacters()
+            } catch (e: Throwable) {
+                _snackbar.value = e.message
+            }
         }
     }
 
@@ -53,6 +62,10 @@ class CharactersViewModel @Inject constructor(repository: BookCharactersReposito
 
     fun setSearchedName(name: String) {
         _searchedName.value = name
+    }
+
+    fun clearSnackbarMessage() {
+        _snackbar.value = ""
     }
 }
 

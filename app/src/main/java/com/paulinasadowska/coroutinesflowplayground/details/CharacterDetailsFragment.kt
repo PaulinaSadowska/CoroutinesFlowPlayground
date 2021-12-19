@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CharacterDetailsFragment : Fragment() {
 
-    //private val navigationArgs: CharacterDetailsFragmentArgs by navArgs()
     private val viewModel by viewModels<CharacterDetailsViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
