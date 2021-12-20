@@ -1,26 +1,26 @@
 package com.paulinasadowska.coroutinesflowplayground.charactersList
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RadioButton
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.paulinasadowska.coroutinesflowplayground.databinding.CharactersFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-// todo - testy
-
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
 
     private val viewModel by viewModels<CharactersViewModel>()
     private lateinit var binding: CharactersFragmentBinding
+    private var listener: TextChangedListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = CharactersFragmentBinding.inflate(inflater, container, false)
@@ -64,9 +64,9 @@ class CharactersFragment : Fragment() {
 
     private fun setFiltersAndSearchListeners() {
         binding.apply {
-            searchByName.addTextChangedListener { editable ->
-                viewModel.setSearchedName(editable.toString())
-            }
+            searchByName.addTextChangedListener(TextChangedListener {
+                viewModel.setSearchedName(it)
+            })
             staffRadioButton.setOnSelectedListener {
                 viewModel.setStaffChecked()
             }
@@ -89,6 +89,21 @@ class CharactersFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //TODO - binding.searchByName.removeTextChangedListener()
+        listener?.let { binding.searchByName.removeTextChangedListener(it) }
     }
+}
+
+class TextChangedListener(val action: (String) -> Unit) : TextWatcher {
+    override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {
+        // nop
+    }
+
+    override fun onTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {
+        action(p0.toString())
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+        // nop
+    }
+
 }
